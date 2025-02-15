@@ -18,7 +18,7 @@ import re
 API_ID = "21064438"
 API_HASH = "052d2f50aac2fe3e1d3047be2ec38f31"
 
-MONGO_URL ="mongodb+srv://venturepvtme:INc7HJsa1gt9oZ33@lgcyalex855101.kgbzc.mongodb.net"
+MONGO_URL ="m.kgbzc.mongodb.net"
 
 PHONE_NUMBER = "+918905631869"  
 
