@@ -15,27 +15,33 @@ import os
 import re
 
 
-API_ID = "26271987"
-API_HASH = "c13df74c80d672fbebc0ceaa40efc3f6"
+API_ID = "21064438"
+API_HASH = "052d2f50aac2fe3e1d3047be2ec38f31"
 
 MONGO_URL ="mongodb+srv://venturepvtme:INc7HJsa1gt9oZ33@lgcyalex855101.kgbzc.mongodb.net"
 
-PHONE_NUMBER = "+918999917992"  
+PHONE_NUMBER = "+918905631869"  
+
 
 
 url = "https://t.me/+nQno_QM4iohlNWE1"
 join_message = "Come to my VC"
 
-client = Client(PHONE_NUMBER, API_ID, API_HASH, phone_number=PHONE_NUMBER)
-
 # Dictionary to track user messages
 user_message_count = {}
 
+
+
+
+client = Client(PHONE_NUMBER, API_ID, API_HASH, phone_number=PHONE_NUMBER)
+
+
 @client.on_message(
-    filters.command("fazal", prefixes=["/", ".", "?", "-"])
+    filters.command("alive", prefixes=["/", ".", "?", "-"])
     & ~filters.private)
 async def start(client, message):
     await message.reply_text(f"**ᴜsᴇʀʙᴏᴛ ғᴏʀ ᴄʜᴀᴛᴛɪɴɢ ɪs ᴡᴏʀᴋɪɴɢ**")
+    
     
 @client.on_message(
  (
@@ -59,23 +65,18 @@ async def fazalai(client: Client, message: Message):
            await client.send_chat_action(message.chat.id, ChatAction.TYPING) 
            K = []  
            is_chat = chatai.find({"word": message.text})  
-           k = chatai.find_one({"word": message.text})  
-
-           if k:
-                   for x in is_chat:
-                       K.append(x['text'])
-                       if K:  # Ensure K is not empty before using random.choice   
-                           hey = random.choice(K)    
-                           is_text = chatai.find_one({"text": hey})  
-                           Yo = is_text['check']   
-                           if Yo == "sticker":  
-                               await message.reply_sticker(f"{hey}")   
-                           else:
-                               await message.reply_text(f"{hey}")
-                       else:
-                           print("I don't know how to respond yet! Teach me by replying to my messages.")
-
-        
+           k = chatai.find_one({"word": message.text})      
+           if k:               
+               for x in is_chat:
+                   K.append(x['text'])          
+               hey = random.choice(K)
+               is_text = chatai.find_one({"text": hey})
+               Yo = is_text['check']
+               if Yo == "sticker":
+                   await message.reply_sticker(f"{hey}")
+               if not Yo == "sticker":
+                   await message.reply_text(f"{hey}")
+   
    if message.reply_to_message:  
        fazaldb = MongoClient(MONGO_URL)
        fazal = fazaldb["FazalDB"]["fazal"] 
@@ -87,23 +88,17 @@ async def fazalai(client: Client, message: Message):
                await client.send_chat_action(message.chat.id, ChatAction.TYPING) 
                K = []  
                is_chat = chatai.find({"word": message.text})
-               k = chatai.find_one({"word": message.text})   
-
-           if k:
+               k = chatai.find_one({"word": message.text})      
+               if k:       
                    for x in is_chat:
                        K.append(x['text'])
-                       if K:  # Ensure K is not empty before using random.choice   
-                           hey = random.choice(K)    
-                           is_text = chatai.find_one({"text": hey})  
-                           Yo = is_text['check']   
-                           if Yo == "sticker":  
-                               await message.reply_sticker(f"{hey}")   
-                           else:
-                               await message.reply_text(f"{hey}")
-                       else:
-                           print("I don't know how to respond yet! Teach me by replying to my messages.")
-
-
+                   hey = random.choice(K)
+                   is_text = chatai.find_one({"text": hey})
+                   Yo = is_text['check']
+                   if Yo == "sticker":
+                       await message.reply_sticker(f"{hey}")
+                   if not Yo == "sticker":
+                       await message.reply_text(f"{hey}")
        if not message.reply_to_message.from_user.id == user_id:          
            if message.sticker:
                is_chat = chatai.find_one({"word": message.reply_to_message.text, "id": message.sticker.file_unique_id})
@@ -179,19 +174,53 @@ async def fazalstickerai(client: Client, message: Message):
                is_chat = chatai.find_one({"word": message.reply_to_message.sticker.file_unique_id, "text": message.sticker.file_id})                 
                if not is_chat:
                    chatai.insert_one({"word": message.reply_to_message.sticker.file_unique_id, "text": message.sticker.file_id, "check": "none"})    
+              
 
-@client.on_message(
-    (
-        filters.text
-        | filters.sticker
-    )
-    & filters.private
-    & ~filters.me
-    & ~filters.bot,
-)
-@client.on_message(
-    (filters.text | filters.sticker) & filters.private & ~filters.me & ~filters.bot
-)
+
+# @client.on_message(
+#     (
+#         filters.text
+#         | filters.sticker
+#     )
+#     & filters.private
+#     & ~filters.me
+#     & ~filters.bot,
+# )
+# async def fazalprivate(client: Client, message: Message):
+
+#    chatdb = MongoClient(MONGO_URL)
+#    chatai = chatdb["Word"]["WordDb"]
+#    if not message.reply_to_message: 
+#        await client.send_chat_action(message.chat.id, ChatAction.TYPING) 
+#        K = []  
+#        is_chat = chatai.find({"word": message.text})                 
+#        for x in is_chat:
+#            K.append(x['text'])
+#        hey = random.choice(K)
+#        is_text = chatai.find_one({"text": hey})
+#        Yo = is_text['check']
+#        if Yo == "sticker":
+#            await message.reply_sticker(f"{hey}")
+#        if not Yo == "sticker":
+#            await message.reply_text(f"{hey}")
+#    if message.reply_to_message:            
+#        getme = await client.get_me()
+#        user_id = getme.id       
+#        if message.reply_to_message.from_user.id == user_id:                    
+#            await client.send_chat_action(message.chat.id, ChatAction.TYPING) 
+#            K = []  
+#            is_chat = chatai.find({"word": message.text})                 
+#            for x in is_chat:
+#                K.append(x['text'])
+#            hey = random.choice(K)
+#            is_text = chatai.find_one({"text": hey})
+#            Yo = is_text['check']
+#            if Yo == "sticker":
+#                await message.reply_sticker(f"{hey}")
+#            if not Yo == "sticker":
+#                await message.reply_text(f"{hey}")
+                     
+
 
 
 @client.on_message(
@@ -255,6 +284,16 @@ async def fazalprivate(client: Client, message: Message):
     if user_message_count[user_id] == 2:
         
         await message.reply_text(f'[{join_message}]({url})')
+
+
+
+
+
+
+
+
+
+
 
 @client.on_message(
  (
